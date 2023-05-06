@@ -1,5 +1,5 @@
 # Outline
-a 7-day training on RestAssured API testing framework could be:
+a 7-day training on RestAssured API testing framework:
 
 - Day 1: Introduction to RESTful web services and RestAssured framework. Learn how to set up RestAssured in Maven project, write basic GET and POST requests, and validate response status code, headers and body.
 - Day 2: Learn how to use different types of parameters (query, path, form, header) in RestAssured requests. Learn how to extract data from response using JsonPath and XmlPath. Learn how to use Hamcrest matchers for assertions.

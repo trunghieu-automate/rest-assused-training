@@ -36,3 +36,97 @@
     <version>xxx</version>
 </dependency>
 ```
+
+- Here is sample build.gradle for setting up Rest-Assured
+```groovy
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    // Use rest assured
+    testImplementation 'io.rest-assured:rest-assured:4.3.3'
+    testImplementation 'io.rest-assured:json-schema-validator:4.3.3'
+}
+
+test {
+    useJUnitPlatform()
+}
+```
+
+## Sample using:
+- Send GET request and than verify response code.
+```java
+import static io.restassured.RestAssured.*;
+import static io.restassured.matcher.RestAssuredMatchers.*;
+import static org.hamcrest.Matchers.*;
+
+import org.junit.jupiter.api.Test;
+
+public class GetRequestTest {
+
+    @Test
+    public void testGetStatusCode() {
+        given().
+            baseUri("https://jsonplaceholder.typicode.com").
+        when().
+            get("/posts").
+        then().
+            statusCode(200);
+    }
+}
+```
+- Send GET request and extract some data from the response for verification
+```java
+import static io.restassured.RestAssured.*;
+import static io.restassured.matcher.RestAssuredMatchers.*;
+import static org.hamcrest.Matchers.*;
+
+import org.junit.jupiter.api.Test;
+
+public class GetRequestTest {
+
+    @Test
+    public void testGetData() {
+        String title = 
+        given().
+            baseUri("https://jsonplaceholder.typicode.com").
+        when().
+            get("/posts/1").
+        then().
+            extract().
+            path("title");
+
+        System.out.println("The title of the first post is: " + title);
+    }
+}
+```
+- Make a POST request to a URL and send some data in the request body.
+```java
+import static io.restassured.RestAssured.*;
+import static io.restassured.matcher.RestAssuredMatchers.*;
+import static org.hamcrest.Matchers.*;
+
+import org.junit.jupiter.api.Test;
+
+public class PostRequestTest {
+
+    @Test
+    public void testPostData() {
+        given().
+            baseUri("https://jsonplaceholder.typicode.com").
+            contentType("application/json").
+            body("{\"title\": \"foo\", \"body\": \"bar\", \"userId\": 1}").
+        when().
+            post("/posts").
+        then().
+            statusCode(201).
+            body("id", equalTo(101));
+    }
+}
+```

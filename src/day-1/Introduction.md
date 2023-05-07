@@ -18,3 +18,21 @@
 
 ## Setting up:
 - You can use maven or gradle to set up this dependency.
+- With maven: just add dependency to pom.xml
+```xml
+<dependency>
+    <groupId>io.rest-assured</groupId>
+    <artifactId>rest-assured</artifactId>
+    <version>xxx</version>
+    <scope>test</scope>
+</dependency>
+```
+> This will allow you to Rest-assured with Java DSL.
+- Then, need to add Hmacrest for assertion:
+```xml
+<dependency>
+    <groupId>org.hamcrest</groupId>
+    <artifactId>hamcrest-all</artifactId>
+    <version>xxx</version>
+</dependency>
+```

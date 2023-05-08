@@ -18,7 +18,8 @@
 
 ## Setting up:
 - You can use maven or gradle to set up this dependency.
-- With maven: just add dependency to pom.xml
+#### With maven:
+- We just need to add thing to pom.xml
 ```xml
 <dependency>
     <groupId>io.rest-assured</groupId>
@@ -37,6 +38,7 @@
 </dependency>
 ```
 
+#### With Gradle
 - Here is sample build.gradle for setting up Rest-Assured
 ```groovy
 plugins {
@@ -59,8 +61,9 @@ test {
 }
 ```
 
-## Sample using:
-- Send GET request and than verify response code.
+## Sample usage:
+#### Make a GET request:
+- Send GET request and validate status code and response data
 ```java
 import static io.restassured.RestAssured.*;
 import static io.restassured.matcher.RestAssuredMatchers.*;
@@ -106,7 +109,8 @@ public class GetRequestTest {
     }
 }
 ```
-- Make a POST request to a URL and send some data in the request body.
+#### Make a POST request 
+- Make a POST request and validate the response body data
 ```java
 import static io.restassured.RestAssured.*;
 import static io.restassured.matcher.RestAssuredMatchers.*;
@@ -129,4 +133,40 @@ public class PostRequestTest {
             body("id", equalTo(101));
     }
 }
+```
+#### Validate the header:
+- To validate the reponse header, we need to use `header()` method of Response interface.
+> `responce.header(param)` method take header type arguments then return its value.
+```java
+Response response = get("https://demoqa.com/BookStore/v1/Books");
+assertEquals("application/json; charset=utf-8", response.header("Content-Type"));
+```
+- This code will make a GET request to the given URL and assert that the Content-Type header is equal to “application/json; charset=utf-8”. If the assertion fails, it will throw an AssertionError
+- We can use `headers()` method to get all headers of the responce object
+```java
+Response response = get("https://demoqa.com/BookStore/v1/Books");
+Headers headers = response.headers();
+for (Header header : headers) {
+    System.out.println(header.getName() + ": " + header.getValue());
+    // add any validation logic here
+}
+```
+- Validate header value matching with a RE, using matchPattern() method in Hamcrest API
+```java
+get("https://demoqa.com/BookStore/v1/Books").then()
+    .assertThat()
+    .header("Content-Type", matchesPattern("application/.*"));
+```
+- Validate header value contains a substring, using containsString() (Hamcrest API)
+```java
+
+get("https://demoqa.com/BookStore/v1/Books").then()
+    .assertThat()
+    .header("Content-Type", containsString("json"));
+```
+- Validate that the response has a specific header with a value satisfying a Hamcrest matcher:
+```java
+get("https://demoqa.com/BookStore/v1/Books").then()
+    .assertThat()
+    .header("Content-Type", equalToIgnoringCase("application/json; charset=utf-8"));
 ```
